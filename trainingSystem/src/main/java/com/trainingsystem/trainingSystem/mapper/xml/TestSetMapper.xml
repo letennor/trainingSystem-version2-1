@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.TestSetMapper">
+
+
+    <select id="getRecentTestSetByUserId" resultType="com.trainingsystem.trainingSystem.pojo.TestSet">
+        select tts.set_id, tts.set_level, tts.threshold, tts.teacher_id, tts.gmt_create, tts.gmt_modified
+        from t_normal_test tnt
+                 join t_test_set tts on tnt.set_id = tts.set_id
+        where normal_id = (select test_id
+                           from t_test_result
+                           where user_id = #{userId}
+                             and test_type = 1
+                           order by result_id desc
+            limit 1);
+
+    </select>
+
+</mapper>

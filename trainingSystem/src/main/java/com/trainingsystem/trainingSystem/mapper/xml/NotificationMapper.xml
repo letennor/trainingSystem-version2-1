@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.NotificationMapper">
+
+    <update id="updateCheck">
+        update t_notification
+        set is_check = #{check}
+        where notification_id = #{notificationId}
+    </update>
+
+</mapper>

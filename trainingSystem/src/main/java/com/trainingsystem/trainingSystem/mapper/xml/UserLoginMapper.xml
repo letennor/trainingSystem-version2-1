@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.UserLoginMapper">
+
+    <select id="ifInfoMatch" resultType="com.trainingsystem.trainingSystem.pojo.UserLogin">
+
+        select tul.pwd_id, tul.account, tul.pwd, tul.gmt_create, tul.gmt_modified
+        from t_user tu
+                 join t_user_login tul on tu.pwd_id = tul.pwd_id
+        where tu.account = #{account}
+          and pwd = #{pwd}
+          and user_type = #{userType};
+    </select>
+
+</mapper>

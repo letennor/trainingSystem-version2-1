@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.StudentTestMapper">
+
+    <select id="getStudentTestBySetId" resultType="com.trainingsystem.trainingSystem.pojo.StudentTest">
+        select *
+        from t_student_test
+        where test_id in (select normal_id from t_normal_test where set_id = #{setId})
+    </select>
+
+    <!---->
+
+    <select id="getAllStudentTestByUserId" resultType="com.trainingsystem.trainingSystem.pojo.SpecialTest">
+        select tst2.special_id,
+               tst2.test_name,
+               tst2.knowledge_point,
+               tst2.special_test_level,
+               tst2.special_threshold,
+               tst2.teacher_id,
+               tst2.gmt_create,
+               tst2.gmt_modified
+        from t_student_test tst
+                 join t_special_test tst2 on tst.test_id = tst2.special_id
+        where user_id = #{userId}
+          and test_type = 0;
+
+    </select>
+
+
+</mapper>

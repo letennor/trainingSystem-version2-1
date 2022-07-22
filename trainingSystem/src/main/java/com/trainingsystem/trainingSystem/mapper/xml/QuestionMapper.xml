@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.QuestionMapper">
+
+
+    <select id="getSpecialTestQuestion" resultType="com.trainingsystem.trainingSystem.pojo.Question">
+
+        select tq.question_id,
+               tq.question_title,
+               tq.knowledge_point,
+               tq.question_level,
+               tq.question_form,
+               tq.question_type,
+               tq.teacher_id,
+               tq.gmt_create,
+               tq.gmt_modified
+        from t_special_question tsq
+                 join t_question tq on tsq.question_id = tq.question_id
+        where special_id = #{specialId};
+    </select>
+
+
+    <select id="getNormalTestQuestion" resultType="com.trainingsystem.trainingSystem.pojo.Question">
+
+        select tq.question_id,
+               tq.question_title,
+               tq.knowledge_point,
+               tq.question_level,
+               tq.question_form,
+               tq.question_type,
+               tq.teacher_id,
+               tq.gmt_create,
+               tq.gmt_modified
+        from t_normal_question tnq
+                 join t_question tq on tnq.question_id = tq.question_id
+        where normal_id = #{normalId};
+    </select>
+
+</mapper>

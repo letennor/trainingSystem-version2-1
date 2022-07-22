@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.NormalTestMapper">
+
+    <select id="getNormalTest" resultMap="myGetNormalTest">
+        select tnt.set_id,
+               tnt.normal_id,
+               tnt.test_name,
+               tnt.limit_time,
+               tnq.question_id,
+               tq.question_level,
+               tq.knowledge_point,
+               tq.question_title,
+               tq.question_form,
+               tq.question_type,
+               tqi.question_img_url,
+               t.input,
+               t.output,
+               tqa.language,
+               tqa.standard_answer
+        from t_normal_test tnt
+                 join t_normal_question tnq on tnt.normal_id = tnq.normal_id
+                 left join t_question tq on tnq.question_id = tq.question_id
+                 left join t_question_img tqi on tq.question_id = tqi.question_id
+                 left join t_question_io t on tq.question_id = t.question_id
+                 left join t_question_answer tqa on t.question_id = tqa.question_id
+        where tnq.normal_id = #{normalId};
+    </select>
+
+    <resultMap id="myGetNormalTest" type="com.trainingsystem.trainingSystem.pojo.NormalTest">
+        <result property="normalId" column="normal_id"/>
+        <result property="limitTime" column="limit_time"/>
+        <result property="setId" column="set_id"/>
+        <result property="testName" column="test_name"/>
+        <collection property="normalQuestions" ofType="com.trainingsystem.trainingSystem.pojo.NormalQuestion">
+            <result property="questionId" column="question_id"/>
+            <result property="questionForm" column="question_form"/>
+            <result property="questionTitle" column="question_title"/>
+            <result property="knowledgePoint" column="knowledge_point"/>
+            <result property="questionLevel" column="question_level"/>
+            <result property="questionType" column="question_type"/>
+            <collection property="questionImgList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionImg">
+                <result property="questionImgUrl" column="question_img_url"/>
+            </collection>
+            <collection property="questionIOList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionIO">
+                <result property="input" column="input"/>
+                <result property="output" column="output"/>
+            </collection>
+            <collection property="questionAnswerList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionAnswer">
+                <result property="language" column="language"/>
+                <result property="standardAnswer" column="standard_answer"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="getKnowledgePointListInNormalTest" resultType="java.lang.String">
+
+        select distinct knowledge_point
+        from t_normal_question tnq
+                 join t_question tq on tnq.question_id = tq.question_id
+        where normal_id = #{normalId};
+
+    </select>
+
+
+</mapper>

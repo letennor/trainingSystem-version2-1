@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.MessageMapper">
+
+    <select id="getTeacherMessage" resultMap="myGetTeacherMessage">
+        select tm.message_id,
+               tm.user_id,
+               tm.teacher_id,
+               tm.message_title,
+               tm.message_content,
+               tm.is_replied,
+               tm.message_reply,
+               tm.reply_time,
+               tm.is_check_reply,
+               tm.gmt_create,
+               tu.name
+        from t_message tm
+                 join t_user tu on tm.user_id = tu.user_id
+        where teacher_id = #{teacherId}
+          and is_replied = #{isReplied};
+    </select>
+
+    <resultMap id="myGetTeacherMessage" type="com.trainingsystem.trainingSystem.pojo.Message">
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <!---->
+    <select id="getOneStuAllMessage" resultMap="messageList">
+        select tm.message_id,
+               tm.user_id,
+               tm.teacher_id,
+               tm.message_title,
+               tm.message_content,
+               tm.is_replied,
+               tm.message_reply,
+               tm.reply_time,
+               tm.is_check_reply,
+               tm.gmt_create,
+               tu.name
+        from t_message tm
+                 join t_user tu on tm.teacher_id = tu.user_id
+        where tm.user_id = #{userId}
+    </select>
+    <resultMap id="messageList" type="com.trainingsystem.trainingSystem.pojo.Message">
+        <result property="messageId" column="message_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="messageTitle" column="message_title"/>
+        <result property="messageContent" column="message_content"/>
+        <result property="isReplied" column="is_replied"/>
+        <result property="messageReply" column="message_reply"/>
+        <result property="replyTime" column="reply_time"/>
+        <result property="isCheckReply" column="is_check_reply"/>
+        <result property="teacherName" column="name"/>
+        <result property="gmtCreate" column="gmt_create"/>
+    </resultMap>
+
+
+</mapper>

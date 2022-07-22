@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.CommentMapper">
+
+
+    <select id="allSonComment" resultMap="allSonComment">
+        select comment_id,
+               question_id,
+               tc.user_id      user_id,
+               father_comment_id,
+               comment,
+               tc.replyto_user_id,
+               tc.gmt_create   gmt_create,
+               tc.gmt_modified gmt_create,
+               tu1.name        name1,
+               tu2.name        name2
+        from t_comment tc,
+             t_user tu1,
+             t_user tu2
+        where tc.user_id = tu1.user_id
+          and tc.replyto_user_id = tu2.user_id
+          and tc.question_id = #{questionId}
+    </select>
+    <resultMap id="allSonComment" type="com.trainingsystem.trainingSystem.pojo.Comment">
+        <result property="commentId" column="comment_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="fatherCommentId" column="father_comment_id"/>
+        <result property="replytoUserId" column="replyto_user_id"/>
+        <result property="comment" column="comment"/>
+        <result property="userName" column="name1"/>
+        <result property="upUserName" column="name2"/>
+        <result property="gmtCreate" column="gmt_create"/>
+    </resultMap>
+
+
+    <select id="showAllComment" resultMap="AllComment">
+        select comment_id,
+               question_id,
+               tc.user_id      user_id,
+               father_comment_id,
+               comment,
+               tc.replyto_user_id,
+               tc.gmt_create   gmt_create,
+               tc.gmt_modified gmt_create,
+               tu1.name        name1
+        from t_comment tc,
+             t_user tu1
+        where tc.user_id = tu1.user_id
+          and tc.question_id = #{questionId}
+          and tc.father_comment_id = 0
+    </select>
+    <resultMap id="AllComment" type="com.trainingsystem.trainingSystem.pojo.Comment">
+        <result property="commentId" column="comment_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="fatherCommentId" column="father_comment_id"/>
+        <result property="replytoUserId" column="replyto_user_id"/>
+        <result property="comment" column="comment"/>
+        <result property="userName" column="name1"/>
+        <result property="gmtCreate" column="gmt_create"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.UserMapper">
+
+<!--    查询密码-->
+    <select id="getUserPassword" resultMap="myGetPassword">
+        select tu.account student_id, tu.user_id user_id, tul.pwd pwd
+        from t_user tu join t_user_login tul on tu.pwd_id = tul.pwd_id
+        where tu.account = #{account};
+    </select>
+
+    <resultMap id="myGetPassword" type="com.trainingsystem.trainingSystem.pojo.User">
+        <result property="userId" column="user_id"/>
+        <result property="account" column="student_id"/>
+        <result property="pwd" column="pwd"/>
+    </resultMap>
+
+
+<!--    将用户得userLevel加1-->
+    <update id="plusOneOnUserLevel" parameterType="long">
+        update t_user
+        set user_level = user_level + 1
+        where user_id = #{userId};
+    </update>
+
+    <!--    更改用户等级-->
+    <update id="updateLevel">
+        update t_user set user_level = #{userLevel}
+        where user_id = #{userId}
+    </update>
+
+
+
+</mapper>

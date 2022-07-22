@@ -1,0 +1,16 @@
+//给src文件夹配置别名“@/” ,此配置报错时，前往设置中搜索 check JS 勾选/取消一次
+{
+
+    "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.QuestionRecordMapper">
+
+    <select id="getQuestionRecordByTestId" resultMap="myGetQuestionRecordByTestId">
+        select tqr.user_answer     user_answer,
+               tqr.situation       situation,
+               tqr.test_id,
+               tqr.test_type,
+               tq.question_title   question_title,
+               tq.question_id,
+               tq.knowledge_point,
+               tqa.standard_answer standard_answer,
+               tqa.language
+        from t_question_record tqr
+                 left join t_question_answer tqa on tqr.question_id = tqa.question_id
+                 left join t_question tq on tqr.question_id = tq.question_id
+        where user_id = #{userId}
+          and test_id = #{testId};
+    </select>
+
+    <resultMap id="myGetQuestionRecordByTestId" type="com.trainingsystem.trainingSystem.pojo.QuestionRecord">
+        <result property="questionTitle" column="question_title"/>
+        <result property="userAnswer" column="user_answer"/>
+        <result property="situation" column="situation"/>
+        <result property="questionId" column="question_id"/>
+        <result property="testId" column="test_id"/>
+        <result property="testType" column="test_type"/>
+        <result property="knowledgePoint" column="knowledge_point"/>
+        <collection property="questionAnswerList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionAnswer">
+            <result property="language" column="language"/>
+            <result property="standardAnswer" column="standard_answer"/>
+        </collection>
+    </resultMap>
+
+    <!--取得错得最多的三个知识点-->
+    <select id="getWrongKnowlegePointList" resultType="java.lang.String">
+        select knowledge_point
+        from t_question_record tqr
+                 join t_question tq on tqr.question_id = tq.question_id
+        where user_id = #{userId}
+          and situation = 0
+        group by knowledge_point
+        order by count(*) desc limit 3;
+    </select>
+
+</mapper>

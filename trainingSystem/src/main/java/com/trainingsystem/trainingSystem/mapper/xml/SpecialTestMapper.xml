@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trainingsystem.trainingSystem.mapper.SpecialTestMapper">
+
+    <select id="getSpecialTest" resultMap="myGetSpecialTest">
+        select tst.special_id,
+               tst.test_name,
+               tst.knowledge_point,
+               tst.special_test_level,
+               tnq.question_id,
+               tq.question_level,
+               tq.knowledge_point,
+               tq.question_title,
+               tq.question_form,
+               tq.question_type,
+               tqi.question_img_url,
+               t.input,
+               t.output,
+               tqa.language,
+               tqa.standard_answer
+        from t_special_test tst
+                 join t_special_question tnq on tst.special_id = tnq.special_id
+                 left join t_question tq on tnq.question_id = tq.question_id
+                 left join t_question_img tqi on tq.question_id = tqi.question_id
+                 left join t_question_io t on tq.question_id = t.question_id
+                 left join t_question_answer tqa on t.question_id = tqa.question_id
+        where tnq.special_id = #{specialId};
+    </select>
+
+    <resultMap id="myGetSpecialTest" type="com.trainingsystem.trainingSystem.pojo.SpecialTest">
+        <result property="knowledgePoint" column="knowledge_point"/>
+        <result property="specialId" column="special_id"/>
+        <result property="testName" column="test_name"/>
+        <result property="specialTestLevel" column="special_test_level"/>
+        <collection property="specialQuestions" ofType="com.trainingsystem.trainingSystem.pojo.SpecialQuestion">
+            <result property="questionId" column="question_id"/>
+            <result property="specialQuestionNumber" column="special_question_number"/>
+            <result property="questionTitle" column="question_title"/>
+            <result property="questionLevel" column="question_level"/>
+            <result property="questionForm" column="question_form"/>
+            <result property="questionType" column="question_type"/>
+            <collection property="questionImgList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionImg">
+                <result property="questionImgUrl" column="question_img_url"/>
+            </collection>
+            <collection property="questionIOList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionIO">
+                <result property="input" column="input"/>
+                <result property="output" column="output"/>
+            </collection>
+            <collection property="questionAnswerList" ofType="com.trainingsystem.trainingSystem.pojo.QuestionAnswer">
+                <result property="language" column="language"/>
+                <result property="standardAnswer" column="standard_answer"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+
+    <!--找到某一个老师的所有专项试卷-->
+    <select id="getSpecialTestByTeacherId" resultMap="myGetSpecialTestByTeacherId">
+        select tst.special_id,
+               tst.gmt_create,
+               tst.knowledge_point,
+               tst.teacher_id,
+               tst.special_test_level,
+               tst.test_name,
+               tst.special_threshold,
+               count(*) question_number
+        from t_special_test tst
+                 join t_special_question tsq on tst.special_id = tsq.special_id
+        where teacher_id = #{teacherId}
+        group by tsq.special_id;
+    </select>
+
+    <resultMap id="myGetSpecialTestByTeacherId" type="com.trainingsystem.trainingSystem.pojo.SpecialTest">
+        <result property="questionNumber" column="question_number"/>
+    </resultMap>
+
+
+</mapper>
